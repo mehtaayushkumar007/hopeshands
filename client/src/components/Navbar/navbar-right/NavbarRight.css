@@ -74,14 +74,17 @@
 /* Login */
 
 .login-btn {
-    padding: 10px 22px;
+     width: 143.64px;
+    padding: 0px 0px;
     border: 1px solid #16a34a;
     background: transparent;
     color: #16a34a;
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
+    height: 62px;
     transition: 0.3s;
+    font-size: small;
 }
 
 .login-btn:hover {
@@ -92,7 +95,8 @@
 /* Start Fundraiser */
 
 .fundraiser-btn {
-    padding: 11px 24px;
+     width: 143.64px;
+     height: 62px;
     border: none;
     background: #16a34a;
     color: white;

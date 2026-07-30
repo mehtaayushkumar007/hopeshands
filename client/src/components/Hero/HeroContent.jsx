@@ -1,5 +1,6 @@
 import "./HeroContent.css";
 import { FaArrowRight, FaHeart } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const HeroContent = () => {
   return (
@@ -24,16 +25,19 @@ const HeroContent = () => {
 
       <div className="hero-buttons">
 
-        <button className="btn-primary">
-          Start a Fundraiser
-        </button>
+  <Link to="/register">
+    <button className="primary-btn">
+      Start Fundraising
+    </button>
+  </Link>
 
-        <button className="btn-secondary">
-          Explore Campaigns
-          <FaArrowRight />
-        </button>
+  <Link to="/login">
+    <button className="secondary-btn">
+      Login
+    </button>
+  </Link>
 
-      </div>
+</div>
 
       <div className="hero-community">
 
