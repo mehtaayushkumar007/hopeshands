@@ -1,37 +1,39 @@
-const jwt=require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-module.exports=(req,res,next)=>{
+const authMiddleware = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
 
-const token=req.headers.authorization?.split(" ")[1];
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
 
-if(!token){
+    const token = authHeader.split(" ")[1];
 
-return res.status(401).json({
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-message:"Unauthorized"
+    const user = await User.findById(decoded.id).select("-password");
 
-});
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User no longer exists",
+      });
+    }
 
-}
+    req.user = user;
 
-try{
-
-const decoded=jwt.verify(token,process.env.JWT_SECRET);
-
-req.user=decoded;
-
-next();
-
-}
-
-catch{
-
-res.status(401).json({
-
-message:"Invalid Token"
-
-});
-
-}
-
+    next();
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired token",
+    });
+  }
 };
+
+module.exports = authMiddleware;
