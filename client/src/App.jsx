@@ -8,12 +8,14 @@ import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
+import TopFundraisers from "./components/TopFundraisers/TopFundraisers";
 
 function Home() {
   return (
     <>
       <Navbar />
       <Hero />
+      <TopFundraisers/>
     </>
   );
 }

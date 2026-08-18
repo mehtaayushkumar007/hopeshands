@@ -1,26 +1,48 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    if (!storedUser) {
+      return null;
     }
-  }, []);
 
-  const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
+    try {
+      return JSON.parse(storedUser);
+    } catch (error) {
+      console.error("Invalid stored user:", error);
+      return null;
+    }
+  });
+
+  const [token, setToken] = useState(() => {
+    return localStorage.getItem("token");
+  });
+
+  const isAuthenticated = Boolean(token);
+
+  const login = (newToken, userData) => {
+    console.log("AuthContext login called");
+
+    localStorage.setItem("token", newToken);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(userData)
+    );
+
+    setToken(newToken);
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    setToken(null);
     setUser(null);
   };
 
@@ -28,9 +50,10 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
-        setUser: login,
+        token,
+        isAuthenticated,
+        login,
         logout,
-        isAuthenticated: !!user,
       }}
     >
       {children}
